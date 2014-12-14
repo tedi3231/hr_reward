@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+    
+        <!-- Policy category Tree View -->
+        <record model="ir.ui.view" id="hr__reward_policy_category_tree">
+            <field name="name">hr.reward.policy.category.tree</field>
+            <field name="model">hr.reward.policy.category</field>
+            <field name="arch" type="xml">
+                <tree string="Policy category">
+                    <field name="complete_name"/>
+                    <field name="order_num"/>
+                    <field name="color"/>
+                </tree>
+            </field>
+        </record>
+ 
+        <!--  Policy category Form View -->
+        <record model="ir.ui.view" id="hr__reward_policy_category_form">
+            <field name="name">hr.reward.policy.category.form</field>
+            <field name="model">hr.reward.policy.category</field>
+            <field name="priority" eval="1"/>
+            <field name="arch" type="xml">
+                <form string="Policy category">
+                    <group>                                                
+                            <field name="parent_id"/>
+                            <field name="name"/>
+                            <field name="order_num"/>
+                            <field name="color"/>
+                        </group>
+                </form>
+            </field>
+        </record>
+
+        <!-- Policy Tree View -->
+        <record model="ir.ui.view" id="hr__reward_policy_tree">
+            <field name="name">hr.reward.policy.tree</field>
+            <field name="model">hr.reward.policy</field>
+            <field name="arch" type="xml">
+                <tree string="Policy">
+                    <field name="category_id"/>
+                    <field name="employee_id"/>
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+ 
+        <!--  Policy  Form View -->
+        <record model="ir.ui.view" id="hr__reward_policy_form">
+            <field name="name">hr.reward.policy.form</field>
+            <field name="model">hr.reward.policy</field>
+            <field name="priority" eval="1"/>
+            <field name="arch" type="xml">
+                <form string="Policy">                    
+                        <group>                            
+                        	<field name="category_id"/>
+                    	<field name="employee_id"/>
+                    	<field name="name"/>
+                        </group>
+                        <group>
+                            <field name='policy_items'>
+                                <tree string='Policy items'>
+                                    <field name='content_type'/>
+                                    <field name='content_text'/>
+                                    <field name='content_binary'/>
+                                </tree>
+                            </field>
+                        </group>                    
+                </form>
+            </field>
+        </record>
+
+        <record id="view_employee_tree" model="ir.ui.view">
+            <field name="name">hr.employee.tree</field>
+            <field name="model">hr.employee</field>
+            <field name="priority" eval="1"/>
+            <field name="arch" type="xml">
+                <tree string="Employees" editable="top">
+                    <field name="name"/>
+                    <field name="work_phone"/>
+                    <field name="work_email"/>
+                    <!--<field name="company_id" groups="base.group_multi_company"/>-->
+                    <field name="department_id"/>
+                    <field name="job_id"/>
+                    <!--
+                    <field name="parent_id"/>
+                    <field name="coach_id" invisible="1"/>
+                    -->
+                </tree>
+            </field>
+        </record>
+
+        <record id='open_view_policy_category' model='ir.actions.act_window'>
+            <field name='name'>Policy Category</field>
+            <field name='res_model'>hr.reward.policy.category</field>
+            <field name='view_type'>form</field>
+            <field name='view_mode'>tree,form</field>
+        </record>
+
+       <record id='open_view_policy' model='ir.actions.act_window'>
+            <field name='name'>Policy</field>
+            <field name='res_model'>hr.reward.policy</field>
+            <field name='view_type'>form</field>
+            <field name='view_mode'>tree,form</field>
+        </record>
+
+        <menuitem name='Human Reward' id='menu_hr_reward_root'/>
+        <menuitem name='Human Reward' id='menu_hr_reward_root_left' parent='hr.menu_hr_root'/>
+        <menuitem name='Policy Category' id='menu_hr_reward_policy_category' parent='menu_hr_reward_root_left' action='open_view_policy_category'/>
+        <menuitem name='Policy' id='menu_hr_reward_policy' parent='menu_hr_reward_root_left' action='open_view_policy'/>
+
+    </data>
+</openerp>
