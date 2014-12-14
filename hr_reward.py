@@ -5,7 +5,21 @@ from openerp.modules.module import get_module_resource
 from openerp.osv import fields, osv
 from openerp.tools.translate import _
 
-class hr__reward_policy_category(osv.Model):
+class hr_reward_group(osv.Model):
+    _name = 'hr.reward.group'
+    
+    _columns = {
+        'name':fields.char(string='Policy group',required=True),
+    }
+
+class hr_employee(osv.Model):
+    _inherit='hr.employee'
+
+    _columns = {
+        'reward_groups':fields.many2many('hr.reward.group','employee_group_rel','emp_id','group_id',string='Reward groups'),
+    }
+
+class hr_reward_policy_category(osv.Model):
 
     def name_get(self, cr, uid, ids, context=None):
         if not ids:
@@ -54,9 +68,10 @@ class hr_reward_policy(osv.Model):
 
     _columns = {
         'name' : fields.char("Policy name",size=500,required=True),
-        'employee_id':fields.many2one('hr.employee','Employee'),
+        #'employee_id':fields.many2one('hr.employee','Employee'),
         'category_id':fields.many2one('hr.reward.policy.category','Policy Ctegory',required=True),
-        'policy_items':fields.one2many('hr.reward.policy.item','policy_id',string='Policy items')
+        'policy_items':fields.one2many('hr.reward.policy.item','policy_id',string='Policy items'),
+        'reward_groups':fields.many2many('hr.reward.group','policy_id','group_id','policy_group_rel','Reward groups'),
     }
 
 class hr_reward_policy_item(osv.Model):
