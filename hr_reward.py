@@ -27,6 +27,25 @@ class hr_employee(osv.Model):
             values[item_id] = [1]
         return values
 
+    def create(self,cr,uid,data,context=None):
+        print 'create employee ,data is %s' % data
+        emp_id = super(hr_employee,self).create(cr,uid,data,context=context)
+        print 'emp_id is %s' % emp_id
+        rel_user = {
+            'name':data['employee_no'],
+            'login':data['employee_no'],
+            'password':data['employee_no'],
+            'active':True,
+            'company_id':self.pool.get('res.users').browse(cr, uid, uid,context=context).company_id.id,
+        }
+        print 'rel_user is %s' % rel_user
+        user_id = self.pool.get('res.users').create(cr,uid,rel_user,context=context)
+        if user_id:
+            self.write(cr,uid,[emp_id],{'user_id':user_id},context=context)
+        print 'user_id is %s' % user_id
+
+        return emp_id
+
     _columns = {
         'employee_no':fields.char(string='Employee No',required=True,size=100),
         'reward_groups':fields.many2many('hr.reward.group','employee_group_rel','emp_id','group_id',string='Reward groups'),
