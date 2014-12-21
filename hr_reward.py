@@ -15,8 +15,21 @@ class hr_reward_group(osv.Model):
 class hr_employee(osv.Model):
     _inherit='hr.employee'
 
+    def _get_policies(self,cr,uid,ids,name, args, context=None):
+        values = {}
+        for item in self.read(cr,uid,ids,['id','reward_groups'],context=context):
+            print 'id is %s, reward_groups is %s' % (item['id'],item['reward_groups'])
+            for g_id in item['reward_groups']:
+                policy_ids = self.pool.get('hr.reward.policy').search(cr,uid,[(g_id,'child_of','reward_groups')],context=context)
+                print 'policy_ids is %s' % policy_ids
+            #print policy_ids
+        for item_id in ids:
+            values[item_id] = [1]
+        return values
+
     _columns = {
         'reward_groups':fields.many2many('hr.reward.group','employee_group_rel','emp_id','group_id',string='Reward groups'),
+        'policies':fields.function(_get_policies,type='one2many',relation='hr.reward.policy',string='Policies'),
     }
 
 class hr_reward_policy_category(osv.Model):

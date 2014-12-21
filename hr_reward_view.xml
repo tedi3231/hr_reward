@@ -93,6 +93,31 @@
             </field>
         </record>
 
+        <record id="hr_reward_employee" model="ir.ui.view">
+            <field name="name">hr.reward.employee.form1</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@string='Personal Information']" position="after">
+                    <page string="Policies">
+                        <field name='policies'>
+                            <tree version='7.0'>
+                                <field name='name'/>
+                            </tree>
+                        </field>
+                    </page>
+                </xpath>
+
+                <xpath expr="//page[@string='Personal Information']" position="replace"/>
+                <xpath expr="//label[@for='category_ids']" position="replace"/>
+                <xpath expr="//field[@name='category_ids']" position="replace"/>
+                <xpath expr="//label[@for='work_email']" position="before">
+                    <label for="reward_groups" class="oe_edit_only"/>
+                    <field name="reward_groups" widget="many2many_tags" placeholder="Reward groups"/>
+                </xpath>
+            </field>
+        </record>
+
 		<record id='view_reward_group_tree' model='ir.ui.view'>
 			<field name='name'>hr.reward.group.tree</field>
 			<field name='model'>hr.reward.group</field>
