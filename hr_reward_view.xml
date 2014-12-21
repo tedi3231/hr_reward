@@ -61,10 +61,20 @@
 					</group>
 					<group>
 						<field name='policy_items' nolabel='1'>
+                            <form string="Policy item">
+                                <group>
+                                    <field name="content_type"/>
+                                    <field name="order_num"/>
+                                </group>
+                                <group col="4">
+                                    <field name="content_text" colspan="4" attrs="{'invisible': ['|',('content_type','=','image'),('content_type','=','video')]}"/>
+                                    <field name="content_binary" colspan="4"  attrs="{'invisible': [('content_type','=','text')]}"/>
+                                </group>
+                            </form>
 							<tree string='Policy items'>
 								<field name='content_type'/>
-								<field name='content_text'/>
-								<field name='content_binary'/>
+								<field name='content_text' attrs="{'invisible': ['|',('content_type','=','image'),('content_type','=','video')]}"/>
+								<field name='content_binary' attrs="{'invisible': [('content_type','=','text')]}"/>
 							</tree>
 						</field>
 					</group>                    
@@ -78,17 +88,12 @@
             <field name="priority" eval="1"/>
             <field name="arch" type="xml">
                 <tree string="Employees" editable="top">
+                    <field name="employee_no"/>
                     <field name="name"/>
+                    <field name="department_id"/>
                     <field name="work_phone"/>
                     <field name="work_email"/>
-                    <!--<field name="company_id" groups="base.group_multi_company"/>-->
-                    <field name="department_id"/>
-                    <field name="job_id"/>
-					<field name='reward_groups' widget='many2many_tags'/>
-                    <!--
-                    <field name="parent_id"/>
-                    <field name="coach_id" invisible="1"/>
-                    -->
+                    <field name='reward_groups' widget='many2many_tags'/>
                 </tree>
             </field>
         </record>
@@ -98,23 +103,25 @@
             <field name="model">hr.employee</field>
             <field name="inherit_id" ref="hr.view_employee_form"/>
             <field name="arch" type="xml">
-                <xpath expr="//page[@string='Personal Information']" position="after">
-                    <page string="Policies">
-                        <field name='policies'>
-                            <tree version='7.0'>
-                                <field name='name'/>
-                            </tree>
-                        </field>
-                    </page>
+                <xpath expr="//label[@for='work_email']" position="replace"/>
+                <xpath expr="//field[@name='work_email']" position="replace"/>
+                <xpath expr="//label[@for='work_phone']" position="replace"/>
+                <xpath expr="//field[@name='work_phone']" position="replace"/>
+                <xpath expr="//field[@name='name']/.." position="after">
+                    <group col="4">
+                        <field name="employee_no"/>
+                        <field name="user_id" on_change="onchange_user(user_id)" string="Related User"
+                                                context="{'default_groups_ref': ['base.group_user']}"/>
+                        <field name="work_email"/>
+                        <field name="work_phone"/>
+                        <field name="department_id" on_change="onchange_department_id(department_id)"/>
+                        <field name="job_id"/>
+                        <field name="reward_groups" widget="many2many_tags" placeholder="Reward groups" colspan="4"/>
+                    </group>
                 </xpath>
-
-                <xpath expr="//page[@string='Personal Information']" position="replace"/>
                 <xpath expr="//label[@for='category_ids']" position="replace"/>
                 <xpath expr="//field[@name='category_ids']" position="replace"/>
-                <xpath expr="//label[@for='work_email']" position="before">
-                    <label for="reward_groups" class="oe_edit_only"/>
-                    <field name="reward_groups" widget="many2many_tags" placeholder="Reward groups"/>
-                </xpath>
+                <xpath expr="//notebook" position="replace"/>
             </field>
         </record>
 
@@ -161,11 +168,19 @@
             <field name='view_mode'>tree,form</field>
         </record>
 
-        <menuitem name='Human Reward' id='menu_hr_reward_root'/>
-        <menuitem name='Human Reward' id='menu_hr_reward_root_left' parent='hr.menu_hr_root'/>
-        <menuitem name='Policy Category' id='menu_hr_reward_policy_category' parent='menu_hr_reward_root_left' action='open_view_policy_category'/>
-        <menuitem name='Policy' id='menu_hr_reward_policy' parent='menu_hr_reward_root_left' action='open_view_policy'/>
-        <menuitem name='Reward Groups' id='menu_hr_reward_group' parent='menu_hr_reward_root_left' action='open_view_reward_group'/>
+        <record id='open_view_reward_employee' model='ir.actions.act_window'>
+            <field name='name'>Employees</field>
+            <field name='res_model'>hr.employee</field>
+            <field name='view_type'>form</field>
+            <field name='view_mode'>tree,form</field>
+        </record>
+
+        <menuitem name="HR Policy" id="menu_hr_policy"/>
+        <menuitem name='Human Reward' id='menu_hr_reward_root_left' parent='menu_hr_policy'/>
+        <menuitem name='Employees' id='menu_hr_reward_employee_show' parent='menu_hr_reward_root_left' action='open_view_reward_employee' sequence="10" />
+        <menuitem name='Policy Category' id='menu_hr_reward_policy_category' parent='menu_hr_reward_root_left' action='open_view_policy_category' sequence="20"/>
+        <menuitem name='Policy' id='menu_hr_reward_policy' parent='menu_hr_reward_root_left' action='open_view_policy'  sequence="30"/>
+        <menuitem name='Reward Groups' id='menu_hr_reward_group' parent='menu_hr_reward_root_left' action='open_view_reward_group'  sequence="40"/>
 
     </data>
 </openerp>

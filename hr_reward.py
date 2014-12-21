@@ -28,6 +28,7 @@ class hr_employee(osv.Model):
         return values
 
     _columns = {
+        'employee_no':fields.char(string='Employee No',required=True,size=100),
         'reward_groups':fields.many2many('hr.reward.group','employee_group_rel','emp_id','group_id',string='Reward groups'),
         'policies':fields.function(_get_policies,type='one2many',relation='hr.reward.policy',string='Policies'),
     }
@@ -96,5 +97,5 @@ class hr_reward_policy_item(osv.Model):
         #'content':fields.function(),
         'content_text':fields.text(string='Content'),
         'content_binary':fields.binary(string='Binary content',filters='*.png,*.gif,*.mp4,*.jpg,*.jpeg'),
-        'add_date':fields.date(string='Add date'),
+        'order_num':fields.integer(string='Order num'),
     }
