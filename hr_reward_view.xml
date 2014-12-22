@@ -119,9 +119,18 @@
                         <field name="reward_groups" widget="many2many_tags" placeholder="Reward groups" colspan="4"/>
                     </group>
                 </xpath>
+                <xpath expr="//notebook" position="before">
+                    <field name='policies'>
+                        <tree string='Policies'>
+                            <field name='name'/>
+                        </tree>
+                    </field>
+                </xpath>
+
                 <xpath expr="//label[@for='category_ids']" position="replace"/>
                 <xpath expr="//field[@name='category_ids']" position="replace"/>
                 <xpath expr="//notebook" position="replace"/>
+
             </field>
         </record>
 

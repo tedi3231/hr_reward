@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data noupdate="0">
+
+    <record id="reward_employee" model="res.groups">
+        <field name="name">Policy Employee</field>
+        <field name="comment">the user will be able to get his policys and categories.</field>
+    </record>
+
+    <record id="reward_policy_publisher" model="res.groups">
+        <field name="name">Policy Publisher</field>
+        <field name="implied_ids" eval="[(4, ref('reward_employee'))]"/>
+        <field name="comment">the user will be able to manager policy and policy categories.</field>
+    </record>
+
+    <record id="reward_people_manager" model="res.groups">
+        <field name="name">Policy People Manager</field>
+        <field name="comment">Manager employee.</field>
+        <field name="implied_ids" eval="[(4, ref('reward_employee'))]"/>
+    </record>
+
+    <record id="reward_policy_admin" model="res.groups">
+        <field name="name">Policy Publisher</field>
+        <field name="implied_ids" eval="[(4, ref('reward_people_manager'))]"/>
+        <field name="comment">Can manage all reward sources.</field>
+    </record>
+
+</data>
+</openerp>

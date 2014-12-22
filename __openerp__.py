@@ -13,7 +13,8 @@
         'hr',        
     ],
     'data': [
-        'hr_reward_view.xml'
+        'hr_reward_view.xml',
+        'security/reward_security.xml',
     ],
     'demo': [
         #'demo/hr_applicant.xml'
