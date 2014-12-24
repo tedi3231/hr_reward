@@ -127,6 +127,18 @@ class hr_reward_policy_category(osv.Model):
 class hr_reward_policy(osv.Model):
     _name = 'hr.reward.policy'
 
+    def act_review(self, cr, uid, ids, context=None):
+        print 'act_review called!'
+        context={}
+        context["key"]="value"
+                
+        ret = {
+            'type': 'ir.actions.client',
+            'tag': 'reward.btn_review',
+            'context':context,
+        }
+        return ret
+    
     _columns = {
         'name' : fields.char("Policy name",size=500,required=True),
         #'employee_id':fields.many2one('hr.employee','Employee'),

@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
     <data>
-    
+        <record id="action_policy_review" model="ir.actions.client">
+            <field name="tag">reward.btn_review</field>
+        </record>
+
         <!-- Policy category Tree View -->
         <record model="ir.ui.view" id="hr_reward_policy_category_tree">
             <field name="name">hr.reward.policy.category.tree</field>
@@ -14,7 +17,7 @@
                 </tree>
             </field>
         </record>
- 
+
         <!--  Policy category Form View -->
         <record model="ir.ui.view" id="hr_reward_policy_category_form">
             <field name="name">hr.reward.policy.category.form</field>
@@ -22,7 +25,7 @@
             <field name="priority" eval="1"/>
             <field name="arch" type="xml">
                 <form string="Policy category">
-                    <group>                                                
+                    <group>
                         <field name="parent_id"/>
                         <field name="name"/>
                         <field name="order_num"/>
@@ -45,43 +48,48 @@
                 </tree>
             </field>
         </record>
- 
+
         <!--  Policy  Form View -->
         <record model="ir.ui.view" id="hr_reward_policy_form">
             <field name="name">hr.reward.policy.form</field>
             <field name="model">hr.reward.policy</field>
             <field name="priority" eval="1"/>
             <field name="arch" type="xml">
-                <form string="Policy">                    
-					<group>                            
-						<field name="category_id"/>
-                    	<!--<field name="employee_id"/>-->
-                    	<field name="name"/>
-						<field name='reward_groups' widget='many2many_tags'/>
-					</group>
-					<group>
-						<field name='policy_items' nolabel='1'>
-                            <form string="Policy item">
-                                <group>
-                                    <field name="content_type"/>
-                                    <field name="order_num"/>
-                                </group>
-                                <group col="4">
-                                    <field name="content_text" colspan="4" attrs="{'invisible': ['|',('content_type','=','image'),('content_type','=','video')]}"/>
-                                    <field name="content_binary" colspan="4"  attrs="{'invisible': [('content_type','=','text')]}"/>
-                                </group>
-                            </form>
-							<tree string='Policy items'>
-								<field name='content_type'/>
-								<field name='content_text' attrs="{'invisible': ['|',('content_type','=','image'),('content_type','=','video')]}"/>
-								<field name='content_binary' attrs="{'invisible': [('content_type','=','text')]}"/>
-							</tree>
-						</field>
-					</group>                    
-                </form>
+                <sheet>
+                    <form string="Policy">
+                        <div class="oe_right oe_button_box" name="button_box">
+                            <!-- Put here related buttons -->
+                            <button type='object' name='act_review' string='Review' class='oe_highlight'/>
+                        </div>
+                        <group>
+                            <field name="category_id"/>
+                            <!--<field name="employee_id"/>-->
+                            <field name="name"/>
+                            <field name='reward_groups' widget='many2many_tags'/>
+                        </group>
+                        <group>
+                            <field name='policy_items' nolabel='1'>
+                                <form string="Policy item">
+                                    <group>
+                                        <field name="content_type"/>
+                                        <field name="order_num"/>
+                                    </group>
+                                    <group col="4">
+                                        <field name="content_text" colspan="4" attrs="{'invisible': ['|',('content_type','=','image'),('content_type','=','video')]}"/>
+                                        <field name="content_binary" colspan="4"  attrs="{'invisible': [('content_type','=','text')]}"/>
+                                    </group>
+                                </form>
+                                <tree string='Policy items'>
+                                    <field name='content_type'/>
+                                    <field name='content_text' attrs="{'invisible': ['|',('content_type','=','image'),('content_type','=','video')]}"/>
+                                    <field name='content_binary' attrs="{'invisible': [('content_type','=','text')]}"/>
+                                </tree>
+                            </field>
+                        </group>
+                    </form>
+                </sheet>
             </field>
         </record>
-
         <record id="view_employee_tree" model="ir.ui.view">
             <field name="name">hr.employee.tree</field>
             <field name="model">hr.employee</field>
@@ -97,7 +105,6 @@
                 </tree>
             </field>
         </record>
-
         <record id="hr_reward_employee" model="ir.ui.view">
             <field name="name">hr.reward.employee.form1</field>
             <field name="model">hr.employee</field>
@@ -111,7 +118,7 @@
                     <group col="4">
                         <field name="employee_no"/>
                         <field name="user_id" on_change="onchange_user(user_id)" string="Related User"
-                                                context="{'default_groups_ref': ['base.group_user']}"/>
+                        context="{'default_groups_ref': ['base.group_user']}"/>
                         <field name="work_email"/>
                         <field name="work_phone"/>
                         <field name="department_id" on_change="onchange_department_id(department_id)"/>
@@ -126,64 +133,56 @@
                         </tree>
                     </field>
                 </xpath>
-
                 <xpath expr="//label[@for='category_ids']" position="replace"/>
                 <xpath expr="//field[@name='category_ids']" position="replace"/>
                 <xpath expr="//notebook" position="replace"/>
 
             </field>
         </record>
-
-		<record id='view_reward_group_tree' model='ir.ui.view'>
-			<field name='name'>hr.reward.group.tree</field>
-			<field name='model'>hr.reward.group</field>
-			<field name='arch' type='xml'>
-				<tree string='Reward groups' editable='top'>
-					<field name='name'/>
-				</tree>
-			</field>
-		</record>
-
-		<record id='view_reward_group_form' model='ir.ui.view'>
-			<field name='name'>hr.reward.group.form</field>
-			<field name='model'>hr.reward.group</field>
-			<field name='arch' type='xml'>
-				<form>
-					<group>
-						<field name='name'/>
-					</group>
-				</form>
-			</field>
-		</record>
-
+        <record id='view_reward_group_tree' model='ir.ui.view'>
+            <field name='name'>hr.reward.group.tree</field>
+            <field name='model'>hr.reward.group</field>
+            <field name='arch' type='xml'>
+                <tree string='Reward groups' editable='top'>
+                    <field name='name'/>
+                </tree>
+            </field>
+        </record>
+        <record id='view_reward_group_form' model='ir.ui.view'>
+            <field name='name'>hr.reward.group.form</field>
+            <field name='model'>hr.reward.group</field>
+            <field name='arch' type='xml'>
+                <form>
+                    <group>
+                        <field name='name'/>
+                    </group>
+                </form>
+            </field>
+        </record>
         <record id='open_view_policy_category' model='ir.actions.act_window'>
             <field name='name'>Policy Category</field>
             <field name='res_model'>hr.reward.policy.category</field>
             <field name='view_type'>form</field>
             <field name='view_mode'>tree,form</field>
         </record>
-
-       <record id='open_view_policy' model='ir.actions.act_window'>
+        <record id='open_view_policy' model='ir.actions.act_window'>
             <field name='name'>Policy</field>
             <field name='res_model'>hr.reward.policy</field>
             <field name='view_type'>form</field>
             <field name='view_mode'>tree,form</field>
         </record>
-
-       <record id='open_view_reward_group' model='ir.actions.act_window'>
+        <record id='open_view_reward_group' model='ir.actions.act_window'>
             <field name='name'>Reward group</field>
             <field name='res_model'>hr.reward.group</field>
             <field name='view_type'>form</field>
             <field name='view_mode'>tree,form</field>
         </record>
-
         <record id='open_view_reward_employee' model='ir.actions.act_window'>
             <field name='name'>Employees</field>
             <field name='res_model'>hr.employee</field>
             <field name='view_type'>form</field>
             <field name='view_mode'>tree,form</field>
         </record>
-
         <menuitem name="HR Policy" id="menu_hr_policy"/>
         <menuitem name='Human Reward' id='menu_hr_reward_root_left' parent='menu_hr_policy'/>
         <menuitem name='Employees' id='menu_hr_reward_employee_show' parent='menu_hr_reward_root_left' action='open_view_reward_employee' sequence="10" />

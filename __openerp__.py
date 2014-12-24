@@ -14,6 +14,7 @@
     ],
     'data': [
         'hr_reward_view.xml',
+        'views.xml',
         'security/reward_security.xml',
     ],
     'demo': [
